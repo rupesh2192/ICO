@@ -1,2 +1,2 @@
 python manage.py migrate
-python manage create_users
+python manage.py create_users
