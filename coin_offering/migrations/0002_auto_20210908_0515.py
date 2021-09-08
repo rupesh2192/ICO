@@ -6,7 +6,7 @@ from django.db import migrations
 def generate_tokens(apps, schema_editor):
     Token = apps.get_model('coin_offering', 'Token')
     tokens = []
-    for i in range(500):
+    for i in range(5000):
         tokens.append(Token())
 
     Token.objects.bulk_create(tokens)
