@@ -131,4 +131,4 @@ REST_FRAMEWORK = {
 }
 LOGIN_REDIRECT_URL = '/bid'
 
-django_heroku.settings(locals(), databases=False, test_runner=False)
+django_heroku.settings(locals(), test_runner=False)
