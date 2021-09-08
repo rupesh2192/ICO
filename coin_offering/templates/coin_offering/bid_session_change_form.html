@@ -1,0 +1,15 @@
+{% extends 'admin/change_form.html' %}
+{% block object-tools-items %}
+{% load i18n admin_urls %}
+<li>
+    {% if not original.is_active %}
+    <a href="{% url 'admin:allocate-tokens' original.pk %}"  class="historylink">Allocate Tokens</a>
+    {% endif %}
+</li>
+<li>
+    {% if not original.is_active %}
+    <a target="_blank" href="{% url 'admin:allocation-report' original.pk %}"  class="historylink">Allocation Report</a>
+    {% endif %}
+</li>
+{{ block.super }}
+{% endblock %}

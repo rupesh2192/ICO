@@ -1,0 +1,32 @@
+<style>
+   th, td {
+        border: 1px solid black;
+    }
+    tr:nth-child(even) {
+        background-color: #90cbee;
+    }
+</style>
+
+<table>
+    <thead>
+    <th>Bid Session: {{bid_session.title}}</th>
+    </thead>
+    <thead>
+    <th>User</th>
+    <th>Bid Time</th>
+    <th>Bid Quantity</th>
+    <th>Bid Price</th>
+    <th>Allocated Quantity</th>
+    <th>Pending Quantity</th>
+    </thead>
+    {% for obj in bids %}
+    <tr>
+        <td>{{obj.user}}</td>
+        <td>{{obj.created_at}}</td>
+        <td>{{obj.quantity}}</td>
+        <td>{{obj.price}}</td>
+        <td>{{obj.allocated_quantity}}</td>
+        <td>{{obj.pending_quantity}}</td>
+    </tr>
+    {% endfor %}
+</table>
