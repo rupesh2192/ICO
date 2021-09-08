@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.core import validators
-from django.db import models
+from django.db import models, transaction
 # Create your models here.
 from django.utils import timezone
 
@@ -19,7 +19,7 @@ class Token(BaseModel):
     bid = models.ForeignKey('Bid', related_name="allocated_tokens", on_delete=models.PROTECT, default=None, null=True, blank=True)
 
     class Meta:
-        ordering = ('-assigned_date',)
+        ordering = ('-assigned_date', 'assigned_to')
 
 
 class BidSession(BaseModel):
@@ -39,8 +39,8 @@ class BidSession(BaseModel):
 
     def allocate(self):
         for bid in self.bids_received.filter(processed=False).order_by('-price', 'created_at'):
-            print(bid)
-            bid.allocate()
+            if not bid.allocate():
+                break
 
     @property
     def is_active(self):
@@ -60,19 +60,20 @@ class Bid(BaseModel):
         return f"{self.user}-{self.price}-{self.quantity}-{self.created_at}"
 
     def allocate(self):
-        available_tokens = Token.objects.filter(assigned_to=None).order_by("created_at").count()
-        # If all tokens already exhausted
-        if not available_tokens:
-            return False
-        # Required tokens are available
-        if available_tokens >= self.quantity:
-            tokens = Token.objects.filter(assigned_to=None).order_by("created_at")[:self.quantity]
+        with transaction.atomic():
+            available_tokens = Token.objects.filter(assigned_to=None).order_by("created_at").count()
+            # If all tokens already exhausted
+            if not available_tokens:
+                return False
+            # Required tokens are available
+            if available_tokens >= self.quantity:
+                tokens = Token.objects.filter(assigned_to=None).order_by("created_at")[:self.quantity]
 
-        # Limited tokens are available
-        else:
-            tokens = Token.objects.filter(assigned_to=None).order_by("created_at")
-        self.allocated_quantity = Token.objects.filter(pk__in=tokens).update(assigned_to=self.user, bid=self, assigned_date=timezone.now())
-        self.processed = True
-        self.save()
+            # Limited tokens are available
+            else:
+                tokens = Token.objects.filter(assigned_to=None).order_by("created_at")
+            self.allocated_quantity = Token.objects.filter(pk__in=tokens).update(assigned_to=self.user, bid=self, assigned_date=timezone.now())
+            self.processed = True
+            self.save()
 
         return True
