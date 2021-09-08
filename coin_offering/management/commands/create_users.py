@@ -7,8 +7,10 @@ class Command(BaseCommand):
     help = 'Resets allocation of all tokens'
 
     def handle(self, *args, **options):
-        User = get_user_model()
-        User.objects.create_superuser('admin', 'admin@ico.com', 'admin')
-        User.objects.create_user('john', 'john@ico.com', 'admin')
-        User.objects.create_user('mike', 'mike@ico.com', 'admin')
+        try:
+            User = get_user_model()
+            User.objects.create_superuser('admin', 'admin@ico.com', 'admin')
+            User.objects.create_user('john', 'john@ico.com', 'admin')
+            User.objects.create_user('mike', 'mike@ico.com', 'admin')
+        except: pass
 
