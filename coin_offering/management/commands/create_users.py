@@ -4,7 +4,7 @@ from coin_offering.models import BidSession, Token, Bid
 
 
 class Command(BaseCommand):
-    help = 'Resets allocation of all tokens'
+    help = 'Create Initial Users'
 
     def handle(self, *args, **options):
         try:

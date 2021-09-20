@@ -16,7 +16,8 @@ class Token(BaseModel):
     assigned_to = models.ForeignKey(User, related_name='assigned_tokens', null=True, default=None, blank=True,
                                     on_delete=models.PROTECT)
     assigned_date = models.DateTimeField(default=None, null=True, blank=True)
-    bid = models.ForeignKey('Bid', related_name="allocated_tokens", on_delete=models.PROTECT, default=None, null=True, blank=True)
+    bid = models.ForeignKey('Bid', related_name="allocated_tokens", on_delete=models.PROTECT, default=None, null=True,
+                            blank=True)
 
     class Meta:
         ordering = ('-assigned_date', 'assigned_to')
@@ -72,7 +73,8 @@ class Bid(BaseModel):
             # Limited tokens are available
             else:
                 tokens = Token.objects.filter(assigned_to=None).order_by("created_at")
-            self.allocated_quantity = Token.objects.filter(pk__in=tokens).update(assigned_to=self.user, bid=self, assigned_date=timezone.now())
+            self.allocated_quantity = Token.objects.filter(pk__in=tokens).update(assigned_to=self.user, bid=self,
+                                                                                 assigned_date=timezone.now())
             self.processed = True
             self.save()
 

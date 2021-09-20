@@ -1,5 +1,5 @@
 ## Initial Coin Offering
-The platform offers initial tokens that are avaialble for bidding. Users can place their bid during an active bidding session. After the the bidding session is complete, Admin can execute the token allocation algorithm.
+The platform offers initial tokens that are available for bidding. Users can place their bid during an active bidding session. After the bidding session is complete, Admin can execute the token allocation algorithm.
 
 
 This project has 3 main components:
@@ -63,3 +63,8 @@ This project has 3 main components:
   * Click on the `Allocate Tokens` button in the Top right corner
   * After successful allocation, click on `Allocation Report` to check token allocation details
   
+
+### Improvements
+* Accept the no. of tokens from the admin to be make available while creating the bidding session.
+* Add docstrings.
+* 
